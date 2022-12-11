@@ -19,3 +19,8 @@ class BooksSpider(scrapy.Spider):
             l.add_value('author', book_name[1])
             l.add_value('category', category)
             yield l.load_item()
+        
+        next_page = response.css('a.gcaPollLink--next::attr(href)').get()
+        if next_page is not None:
+            yield response.follow(next_page, callback=self.parse)
+
